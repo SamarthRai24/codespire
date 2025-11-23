@@ -1,16 +1,21 @@
 import streamlit as st
-import sounddevice as sd
-import wavio
+# import sounddevice as sd
+# import wavio
 from gtts import gTTS
 from google import genai
 import os
 from tempfile import NamedTemporaryFile
-import speech_recognition as sr
+# import speech_recognition as sr
 import json 
 from streamlit_lottie import st_lottie 
 import requests
 
-GEMINI_API_KEY = "API KEY" 
+# GEMINI_API_KEY = "API KEY" 
+
+if "GEMINI_API_KEY" in st.secrets:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+else:
+    GEMINI_API_KEY = "API KEY"
 
 RECORDING_DURATION = 5 # seconds
 FS = 44100
@@ -224,22 +229,23 @@ col1, col2 = st.columns([1, 1])
 with col1:
     # Voice input button - Secondary Button
     if st.button(f"🎤 Speak for Notes (Max {RECORDING_DURATION}s)", key="speak_notes", help="Record your topic or source material for notes generation."):
-        if client:
-            st.info(f"🎙️ Recording in progress for **{RECORDING_DURATION} seconds**...")
-            recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
-            sd.wait()
-            wavio.write("notes_input.wav", recording, FS, sampwidth=2)
-            try:
-                recognizer = sr.Recognizer()
-                with sr.AudioFile("notes_input.wav") as source:
-                    audio_data = recognizer.record(source)
-                    text = recognizer.recognize_google(audio_data)
-                st.markdown(f'<div class="stAlert success">✅ Recognized Topic: **{text}**</div>', unsafe_allow_html=True)
-                st.session_state["voice_notes"] = text
-            except Exception:
-                st.markdown('<div class="stAlert error">❌ Could not understand audio. Try again or type the text.</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
+        st.warning("Voice feature is disabled in Cloud Deployment.")
+        # if client:
+        #     st.info(f"🎙️ Recording in progress for **{RECORDING_DURATION} seconds**...")
+        #     recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
+        #     sd.wait()
+        #     wavio.write("notes_input.wav", recording, FS, sampwidth=2)
+        #     try:
+        #         recognizer = sr.Recognizer()
+        #         with sr.AudioFile("notes_input.wav") as source:
+        #             audio_data = recognizer.record(source)
+        #             text = recognizer.recognize_google(audio_data)
+        #         st.markdown(f'<div class="stAlert success">✅ Recognized Topic: **{text}**</div>', unsafe_allow_html=True)
+        #         st.session_state["voice_notes"] = text
+        #     except Exception:
+        #         st.markdown('<div class="stAlert error">❌ Could not understand audio. Try again or type the text.</div>', unsafe_allow_html=True)
+        # else:
+        #     st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
 
 with col2:
     # Generate Button - Primary Button
@@ -304,23 +310,24 @@ with col1:
 with col2:
     st.markdown("<div style='margin-top: 24px;'>", unsafe_allow_html=True) 
     if st.button(f"🎤 Speak Subjects (Max {RECORDING_DURATION}s)", key="speak_subjects"):
-        if client:
-            st.info(f"🎙️ Recording subjects for **{RECORDING_DURATION} seconds**...")
-            recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
-            sd.wait()
-            wavio.write("subjects_input.wav", recording, FS, sampwidth=2)
-            try:
-                recognizer = sr.Recognizer()
-                with sr.AudioFile("subjects_input.wav") as source:
-                    audio_data = recognizer.record(source)
-                    text = recognizer.recognize_google(audio_data)
-                st.markdown(f'<div class="stAlert success">✅ Recognized Subjects: **{text}**</div>', unsafe_allow_html=True)
-                st.session_state["voice_subjects"] = text
-            except Exception:
-                st.markdown('<div class="stAlert error">❌ Voice not recognized.</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.warning("Voice feature is disabled in Cloud Deployment.")
+        # if client:
+        #     st.info(f"🎙️ Recording subjects for **{RECORDING_DURATION} seconds**...")
+        #     recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
+        #     sd.wait()
+        #     wavio.write("subjects_input.wav", recording, FS, sampwidth=2)
+        #     try:
+        #         recognizer = sr.Recognizer()
+        #         with sr.AudioFile("subjects_input.wav") as source:
+        #             audio_data = recognizer.record(source)
+        #             text = recognizer.recognize_google(audio_data)
+        #         st.markdown(f'<div class="stAlert success">✅ Recognized Subjects: **{text}**</div>', unsafe_allow_html=True)
+        #         st.session_state["voice_subjects"] = text
+        #     except Exception:
+        #         st.markdown('<div class="stAlert error">❌ Voice not recognized.</div>', unsafe_allow_html=True)
+        # else:
+        #     st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 with col3:
@@ -383,41 +390,42 @@ col1, col2 = st.columns([1, 1])
 
 with col1:
     if st.button(f"🎤 Speak Question (Max {RECORDING_DURATION}s)", key="speak_chat"):
-        if client:
-            st.info(f"🎙️ Recording question for **{RECORDING_DURATION} seconds**...")
-            recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
-            sd.wait()
-            wavio.write("chat_input.wav", recording, FS, sampwidth=2)
-            try:
-                recognizer = sr.Recognizer()
-                with sr.AudioFile("chat_input.wav") as source:
-                    audio_data = recognizer.record(source)
-                    prompt = recognizer.recognize_google(audio_data)
-                if prompt:
-                    st.markdown(f'<div class="stAlert success">✅ Recognized Question: **{prompt}**</div>', unsafe_allow_html=True)
-                    st.session_state["chatbot_messages"].append({"role": "user", "content": prompt})
-                    with st.empty(): 
-                        st.info("🤔 Thinking... Getting **AITR info** with Gemini... Almost done!")
-                    contents_list = []
-                    for msg in st.session_state["chatbot_messages"]:
-                        contents_list.append({"role": msg["role"], "parts": [{"text": msg["content"]}]})
+        st.warning("Voice feature is disabled in Cloud Deployment.")
+        # if client:
+        #     st.info(f"🎙️ Recording question for **{RECORDING_DURATION} seconds**...")
+        #     recording = sd.rec(int(RECORDING_DURATION * FS), samplerate=FS, channels=1, dtype='int16')
+        #     sd.wait()
+        #     wavio.write("chat_input.wav", recording, FS, sampwidth=2)
+        #     try:
+        #         recognizer = sr.Recognizer()
+        #         with sr.AudioFile("chat_input.wav") as source:
+        #             audio_data = recognizer.record(source)
+        #             prompt = recognizer.recognize_google(audio_data)
+        #         if prompt:
+        #             st.markdown(f'<div class="stAlert success">✅ Recognized Question: **{prompt}**</div>', unsafe_allow_html=True)
+        #             st.session_state["chatbot_messages"].append({"role": "user", "content": prompt})
+        #             with st.empty(): 
+        #                 st.info("🤔 Thinking... Getting **AITR info** with Gemini... Almost done!")
+        #             contents_list = []
+        #             for msg in st.session_state["chatbot_messages"]:
+        #                 contents_list.append({"role": msg["role"], "parts": [{"text": msg["content"]}]})
 
-                    with st.spinner("Generating response..."):
-                        try:
-                            resp = client.models.generate_content(
-                                model="gemini-2.0-flash",
-                                contents=contents_list
-                            )
-                            st.session_state["chatbot_messages"].append({"role": "model", "content": resp.text})
-                        except Exception as e:
-                            st.session_state["chatbot_messages"].append({"role": "model", "content": f'❌ **Error:** Could not get answer from Gemini. Check topic or API status. (Reason: {e})'})
+        #             with st.spinner("Generating response..."):
+        #                 try:
+        #                     resp = client.models.generate_content(
+        #                         model="gemini-2.0-flash",
+        #                         contents=contents_list
+        #                     )
+        #                     st.session_state["chatbot_messages"].append({"role": "model", "content": resp.text})
+        #                 except Exception as e:
+        #                     st.session_state["chatbot_messages"].append({"role": "model", "content": f'❌ **Error:** Could not get answer from Gemini. Check topic or API status. (Reason: {e})'})
                     
-                    st.rerun()
+        #             st.rerun()
 
-            except Exception:
-                st.markdown('<div class="stAlert error">❌ Voice not recognized.</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
+        #     except Exception:
+        #         st.markdown('<div class="stAlert error">❌ Voice not recognized.</div>', unsafe_allow_html=True)
+        # else:
+        #     st.markdown('<div class="stAlert error">⚠️ API Client not configured. Check the code for the API Key.</div>', unsafe_allow_html=True)
 
 # Display Chat History
 for message in st.session_state["chatbot_messages"]:

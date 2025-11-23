@@ -25,7 +25,7 @@ This application provides three core functionalities tailored for student academ
 
 ## 🚀 Setup and Run Locally
 
-Follow these steps to set up and run the project on your local machine.
+Follow these steps to set up and create a live website through streamlit
 
 ### Prerequisites
 
@@ -36,10 +36,6 @@ Follow these steps to set up and run the project on your local machine.
 
 ### 1. Clone the Repository
 
-Bash
-git clone [https://github.com/SamarthRai24/codespire.git](https://github.com/SamarthRai24/codespire.git)
-cd codespire
-
 
 
 ### 2. Install Dependencies
@@ -47,24 +43,17 @@ Install all necessary libraries:
 
 Bash
 pip install -r requirements.txt
-(Note: If you do not have a requirements.txt file, manually install the key libraries: pip install streamlit google-genai sounddevice wavio gtts speechrecognition streamlit-lottie requests)
 
 
 
-### 3. Configure API Key (Crucial)
-Open the app.py file and replace the placeholder with your actual new and secure Google Gemini API Key.
+### ☁️ Deployment Guide (deployment branch)
+For the Live Website on Streamlit Cloud, the application is run from the deployment branch. This branch contains a modified version where audio libraries are disabled for server compatibility.
 
-Python
-GEMINI_API_KEY = "API KEY" 
+Requirements: Audio libraries (PyAudio, sounddevice) are commented out for smooth cloud installation.
 
+(app.py): Commented out all the part that hold the voice and listen feature.
 
-
-### 4. Run the Application
-Execute the following command in your terminal:
-
-Bash
-streamlit run app.py
-The application will launch in your default web browser (usually at http://localhost:8501).
+API Key: Streamlit Secrets are used to securely load the GEMINI_API_KEY.
 
 
 
@@ -72,4 +61,3 @@ The application will launch in your default web browser (usually at http://local
 ### Frontend/Deployment: Streamlit
 ### AI/LLM: Google Gemini API
 ### Language: Python
-### Key Libraries: gTTS, sounddevice, speechrecognition, streamlit_lottie

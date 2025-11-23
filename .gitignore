@@ -1,0 +1,13 @@
+# IDE, OS, and Project Environment Files
+.DS_Store
+.vscode/
+.devcontainer/
+.venv/
+venv/
+
+# Python Compilation and Cache
+__pycache__/
+*.pyc
+
+# Temporary User-Generated Files
+notes_input.wav
